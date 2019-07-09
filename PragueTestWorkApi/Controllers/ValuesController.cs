@@ -15,6 +15,7 @@ namespace PragueTestWorkApi.Controllers
         // GET api/values
         public string Get()
         {
+            
             Uri uri = Request.RequestUri;
             Bitly bityly = new Bitly();
             UrlLog.UrlLogdbContext dblog = new UrlLog.UrlLogdbContext();

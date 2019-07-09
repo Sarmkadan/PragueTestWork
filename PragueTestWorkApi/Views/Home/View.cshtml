@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PragueTestWorkApi.Models.UrlLog.LogUrl>
+
+@{
+    Layout = null;
+    Int32 intstamp;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View</title>
+</head>
+<body>
+<style>
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+    }
+    /* Zebra striping */
+    tr:nth-of-type(odd) { 
+        background: #eee; 
+    }
+    th { 
+        background: #333; 
+        color: white; 
+        font-weight: bold; 
+    }
+    td, th { 
+        padding: 6px; 
+        border: 1px solid #ccc; 
+        text-align: left; 
+    }
+    td {
+        
+        word-wrap: break-word;
+        word-break:break-all;
+
+       
+    }
+
+
+
+</style>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>OldUrl</th>
+        <th>NewUrl</th>
+        <th>Result</th>
+        <th>DateTime</th>
+        <th>UnixStamp</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+            <td>
+                @item.OldUrl
+            </td>
+            <td>
+                @item.NewUrl
+            </td>
+            <td>
+                @item.Result
+            </td>
+            <td>
+                @item.Datetimeofrequest
+            </td>
+            <td>
+
+                @{ intstamp = (Int32) (item.Datetimeofrequest.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;}
+                @intstamp
+            </td>
+        </tr>
+    }
+
+</table>
+</body>
+</html>

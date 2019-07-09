@@ -1,24 +1,88 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+﻿<style>
+    .input {
+        width: auto;
+        display: inline-block;
+        font-size: 24px;
+        border-bottom: 1px dotted #dee1e5;
+        color: #242A37;
+        padding: 2px;
+        line-height: 34px;
+        max-width: 80%
+    }
+
+        .input[contenteditable=true]:empty:before {
+            content: attr(placeholder);
+            display: block;
+            color: #dee1e5;
+        }
+</style>
+
+<div class="jumbotron">
+    <h1>Link expander/short's </h1>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
-    </div>
+
+
+<div class="jumbotron">
+    <form id="formtourl" method="get" action="/api/values">
+        <p>
+            <b>URL:</b>  
+            <label id="beware" hidden="hidden"> field url must be not null!</label> 
+            
+            <br>
+            <div>
+                <div id="mainurl" class="input"  contenteditable="true" placeholder="https://stackoverflow.com"></div>
+            </div>
+
+
+        </p>
+        <p>
+            <b>Choose function:</b><Br>
+            <input type="radio" name="browser" value="expand" required> What in there?  (Expand) <Br>
+            <input type="radio" name="browser" value="short"> Do small :D (short) <Br>
+        </p>
+        <p>
+            Result: <Br>
+            <textarea id="result" name="comment" cols="40" rows="3" disabled="true" ></textarea>
+        </p>
+        <p>
+            <input type="submit">
+            <input type="reset" value="Clear">
+        </p>
+    </form>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $("#formtourl").on("submit",
+        function(e) {
+            //Code: Action (like ajax...)
+            if ($("#mainurl").text().length === 0) {
+                $("#beware").show();
+                alert("Url must be not empty");
+            }
+            else {
+                $("#beware").hide();
+
+
+                var radiovalue = $("#formtourl input[type='radio']:checked").val();
+
+              
+
+                var returntstatment = $.get("/api/values?method="+radiovalue+"&url="+$("#mainurl").text(),
+                    function (response) {
+                      
+                        $("#result").val(response);
+                    });
+
+                //alert("sucsess  " + returntstatment.val());
+               // $("#beresultware").text(returntstatment);
+               
+            }
+            return false;
+        });
+    $("#formtourl").on("reset",
+        function(e) {
+            $("#mainurl").text("");
+
+        });
+</script>

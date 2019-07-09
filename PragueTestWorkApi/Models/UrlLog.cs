@@ -8,7 +8,7 @@ using System.Web;
 
 namespace PragueTestWorkApi.Models
 {
-    class UrlLog
+    public class UrlLog
     {
 
         public class UrlLogdbContext : DbContext
