@@ -19,34 +19,59 @@ namespace PragueTestWorkApi.Controllers
             Bitly bityly = new Bitly();
             UrlLog.UrlLogdbContext dblog = new UrlLog.UrlLogdbContext();
             string paramMethod = HttpUtility.ParseQueryString(uri.Query).Get("method");
-            string urifromget = HttpUtility.ParseQueryString(uri.Query).Get("url");
+            if (paramMethod==null)
+            {
+                return "error: no param method";
+            }
+
+
+            string querryvalue =  uri.Query;
+
+            if (!querryvalue.Contains("&url="))
+            {
+                return "error: no param url";
+            }
+
+            if (querryvalue.Contains("&method="+paramMethod))
+            {
+                querryvalue = querryvalue.Replace("&method=" + paramMethod, "").Replace("url=","");
+            }
+            else
+            {
+                querryvalue = querryvalue.Replace("?method=" + paramMethod+"&url=", "");
+            }
+
+            string urifromget = querryvalue;//HttpUtility.ParseQueryString(uri.Query).Get("url");
+
+           
+
+            
+            
             if (paramMethod == "short")
             {
                 
-               
-             
-                string returnuri = bityly.Shorten(urifromget);
-                if (returnuri == "Wrong URL")
+                string returnUri = bityly.Shorten(HttpUtility.HtmlDecode(urifromget));
+                if (returnUri == "Wrong URL")
                 {
                     dblog.ItemDbSet.Add(new UrlLog.LogUrl()
                     {
-                        Datetimeofrequest = DateTime.UtcNow, NewUrl = returnuri, OldUrl = urifromget,
-                        Result = returnuri
+                        Datetimeofrequest = DateTime.UtcNow, NewUrl = returnUri, OldUrl = urifromget,
+                        Result = returnUri
                     });
                     dblog.SaveChanges();
-                    return returnuri;
+                    return returnUri;
                 }
                 else
                 {
                     dblog.ItemDbSet.Add(new UrlLog.LogUrl()
                     {
                         Datetimeofrequest = DateTime.UtcNow,
-                        NewUrl = returnuri,
+                        NewUrl = returnUri,
                         OldUrl = urifromget,
                         Result = "Success"
                     });
                     dblog.SaveChanges();
-                    return returnuri;
+                    return returnUri;
                 }
             }
             else if (paramMethod == "expand")

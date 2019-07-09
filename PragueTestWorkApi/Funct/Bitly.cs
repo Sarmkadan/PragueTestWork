@@ -42,10 +42,10 @@ namespace PragueTestWorkApi.Funct
 
                 throw;
             }
-            catch
+            /*catch
             {
                 return "Wrong URL";
-            }
+            }*/
         }
 
         public string Expand(string shortUrl)
